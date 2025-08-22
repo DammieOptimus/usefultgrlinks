@@ -1,4 +1,4 @@
+https://developer.mozilla.org/en-US/|MDN Web Docs|The ultimate resource for web developers, maintained by Mozilla.
 https://www.google.com|Google Search Engine
-https://github.com|GitHub for Project Hosting
-https://developer.mozilla.org/en-US/|MDN Web Docs - The Ultimate Web Dev Resource
+https://github.com|GitHub|Host and review code, manage projects, and build software.
 https://www.youtube.com|YouTube
