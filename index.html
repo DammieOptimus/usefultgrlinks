@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Vortex</title>
+    <style>
+        :root {
+            --primary-color: #ffffff;
+            --background-color: #003366; /* Deep Blue from Logo */
+            --accent-color: #e4002b; /* Red from Logo */
+            --hover-color: #00aef0; /* Light Blue from Logo */
+            --animation-color: #ffae42;
+            --input-bg-color: #002244; /* Darker blue for input */
+            --error-color: #ffdddd;
+            --error-text-color: #8b0000;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .search-container {
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        #search-box {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            border: 2px solid var(--hover-color);
+            background-color: var(--input-bg-color);
+            color: var(--primary-color);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #search-box::placeholder {
+            color: #ccc;
+            opacity: 0.8;
+        }
+
+        #search-box:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(228, 0, 43, 0.5);
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: link-counter;
+        }
+
+        .link-item {
+            margin-bottom: 1.5rem;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        
+        /* Style for error message when links.txt can't be loaded */
+        .error-message {
+            background-color: var(--error-color);
+            color: var(--error-text-color);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .link-item a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary-color);
+            background: linear-gradient(90deg, var(--accent-color), var(--hover-color));
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-item a:before {
+            counter-increment: link-counter;
+            content: counter(link-counter);
+            font-weight: bold;
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            color: var(--accent-color);
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .link-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .link-item a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .explosion {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--animation-color);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: explode 0.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(30); opacity: 0; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 2rem;
+            color: #ccc;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            h1 { font-size: 2.5rem; }
+            #search-box { font-size: 1rem; padding: 0.8rem; }
+            .link-item a { padding: 1rem; }
+            .link-item a:before { font-size: 1.5rem; width: 35px; height: 35px; margin-right: 1rem; }
+            .link-title { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Link Vortex</h1>
+
+        <div class="search-container">
+            <input type="text" id="search-box" placeholder="Search for a link...">
+        </div>
+
+        <ul class="link-list" id="link-list">
+            <!-- Links will be dynamically loaded here -->
+        </ul>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="copyright-year"></span> Dammie Optimus Solutions. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const linkList = document.getElementById('link-list');
+            const searchBox = document.getElementById('search-box');
+
+            // --- Function to Load Links from File ---
+            async function loadLinks() {
+                try {
+                    const response = await fetch('links.txt');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const text = await response.text();
+                    const lines = text.split('\n').filter(line => line.trim() !== '');
+
+                    if (lines.length === 0) {
+                        linkList.innerHTML = `<li class="error-message">The links.txt file is empty or could not be read.</li>`;
+                        return;
+                    }
+
+                    lines.forEach(line => {
+                        const parts = line.split('|');
+                        if (parts.length === 2) {
+                            const [url, title] = parts.map(s => s.trim());
+                            if (url && title) {
+                                const listItem = document.createElement('li');
+                                listItem.className = 'link-item';
+
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.target = '_blank';
+
+                                const titleSpan = document.createElement('span');
+                                titleSpan.className = 'link-title';
+                                titleSpan.textContent = title;
+
+                                link.appendChild(titleSpan);
+                                listItem.appendChild(link);
+                                linkList.appendChild(listItem);
+                            }
+                        }
+                    });
+
+                    addClickListeners(); // Attach listeners after links are added
+
+                } catch (error) {
+                    console.error('Error loading links:', error);
+                    linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running this from a web server.</li>`;
+                }
+            }
+
+            // --- Search Functionality ---
+            const handleSearch = () => {
+                const searchTerm = searchBox.value.toLowerCase();
+                const linkItems = linkList.querySelectorAll('.link-item');
+
+                linkItems.forEach(item => {
+                    const title = item.querySelector('.link-title').textContent.toLowerCase();
+                    item.style.display = title.includes(searchTerm) ? '' : 'none';
+                });
+            };
+
+            searchBox.addEventListener('input', handleSearch);
+
+            // --- Link Click Animation ---
+            const handleLinkClick = (event) => {
+                event.preventDefault();
+                const link = event.currentTarget;
+                if (link.classList.contains('animating')) return;
+                
+                link.classList.add('animating');
+                const rect = link.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                const explosion = document.createElement('div');
+                explosion.classList.add('explosion');
+                explosion.style.left = `${x}px`;
+                explosion.style.top = `${y}px`;
+                link.appendChild(explosion);
+
+                setTimeout(() => {
+                    window.open(link.href, link.target || '_self');
+                    explosion.remove();
+                    link.classList.remove('animating');
+                }, 500);
+            };
+
+            const addClickListeners = () => {
+                const links = linkList.querySelectorAll('.link-item a');
+                links.forEach(link => {
+                    link.addEventListener('click', handleLinkClick);
+                });
+            };
+
+            // --- Initializers ---
+            loadLinks(); // Load links when the page loads
+
+            const copyrightYear = document.getElementById('copyright-year');
+            copyrightYear.textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>

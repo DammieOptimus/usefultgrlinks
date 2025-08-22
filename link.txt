@@ -1,0 +1,4 @@
+https://www.google.com|Google Search Engine
+https://github.com|GitHub for Project Hosting
+https://developer.mozilla.org/en-US/|MDN Web Docs - The Ultimate Web Dev Resource
+https://www.youtube.com|YouTube
