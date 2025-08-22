@@ -10,6 +10,7 @@
             --background-color: #003366; /* Deep Blue from Logo */
             --accent-color: #e4002b; /* Red from Logo */
             --hover-color: #00aef0; /* Light Blue from Logo */
+            --subtext-color: rgba(255, 255, 255, 0.85);
             --animation-color: #ffae42;
             --input-bg-color: #002244; /* Darker blue for input */
             --error-color: #ffdddd;
@@ -82,7 +83,6 @@
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         }
         
-        /* Style for error message when links.txt can't be loaded */
         .error-message {
             background-color: var(--error-color);
             color: var(--error-text-color);
@@ -122,10 +122,23 @@
             align-items: center;
             flex-shrink: 0;
         }
+        
+        .link-text-content {
+            display: flex;
+            flex-direction: column;
+        }
 
         .link-title {
             font-size: 1.5rem;
             font-weight: 500;
+            word-break: break-word;
+        }
+        
+        .link-subtext {
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+            color: var(--subtext-color);
+            font-style: italic;
             word-break: break-word;
         }
 
@@ -164,6 +177,7 @@
             .link-item a { padding: 1rem; }
             .link-item a:before { font-size: 1.5rem; width: 35px; height: 35px; margin-right: 1rem; }
             .link-title { font-size: 1.2rem; }
+            .link-subtext { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -190,13 +204,10 @@
             const linkList = document.getElementById('link-list');
             const searchBox = document.getElementById('search-box');
 
-            // --- Function to Load Links from File ---
             async function loadLinks() {
                 try {
                     const response = await fetch('links.txt');
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     const text = await response.text();
                     const lines = text.split('\n').filter(line => line.trim() !== '');
 
@@ -207,8 +218,11 @@
 
                     lines.forEach(line => {
                         const parts = line.split('|');
-                        if (parts.length === 2) {
-                            const [url, title] = parts.map(s => s.trim());
+                        if (parts.length >= 2) {
+                            const url = parts[0].trim();
+                            const title = parts[1].trim();
+                            const subtext = parts.length === 3 ? parts[2].trim() : null;
+
                             if (url && title) {
                                 const listItem = document.createElement('li');
                                 listItem.className = 'link-item';
@@ -216,40 +230,51 @@
                                 const link = document.createElement('a');
                                 link.href = url;
                                 link.target = '_blank';
+                                
+                                const textContentDiv = document.createElement('div');
+                                textContentDiv.className = 'link-text-content';
 
                                 const titleSpan = document.createElement('span');
                                 titleSpan.className = 'link-title';
                                 titleSpan.textContent = title;
+                                textContentDiv.appendChild(titleSpan);
 
-                                link.appendChild(titleSpan);
+                                if (subtext) {
+                                    const subtextSpan = document.createElement('span');
+                                    subtextSpan.className = 'link-subtext';
+                                    subtextSpan.textContent = subtext;
+                                    textContentDiv.appendChild(subtextSpan);
+                                }
+
+                                link.appendChild(textContentDiv);
                                 listItem.appendChild(link);
                                 linkList.appendChild(listItem);
                             }
                         }
                     });
-
-                    addClickListeners(); // Attach listeners after links are added
-
+                    addClickListeners();
                 } catch (error) {
                     console.error('Error loading links:', error);
-                    linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running this from a web server.</li>`;
+                    linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running from a web server.</li>`;
                 }
             }
 
-            // --- Search Functionality ---
             const handleSearch = () => {
                 const searchTerm = searchBox.value.toLowerCase();
                 const linkItems = linkList.querySelectorAll('.link-item');
 
                 linkItems.forEach(item => {
                     const title = item.querySelector('.link-title').textContent.toLowerCase();
-                    item.style.display = title.includes(searchTerm) ? '' : 'none';
+                    const subtextEl = item.querySelector('.link-subtext');
+                    const subtext = subtextEl ? subtextEl.textContent.toLowerCase() : '';
+                    
+                    const isMatch = title.includes(searchTerm) || subtext.includes(searchTerm);
+                    item.style.display = isMatch ? '' : 'none';
                 });
             };
 
             searchBox.addEventListener('input', handleSearch);
 
-            // --- Link Click Animation ---
             const handleLinkClick = (event) => {
                 event.preventDefault();
                 const link = event.currentTarget;
@@ -280,8 +305,7 @@
                 });
             };
 
-            // --- Initializers ---
-            loadLinks(); // Load links when the page loads
+            loadLinks();
 
             const copyrightYear = document.getElementById('copyright-year');
             copyrightYear.textContent = new Date().getFullYear();
