@@ -170,6 +170,40 @@
             color: #ccc;
         }
 
+        /* Animation for the pulsating, color-changing link */
+        @keyframes pulsate-glow {
+            0% {
+                color: var(--hover-color);
+                transform: scale(1);
+            }
+            33% {
+                color: var(--accent-color);
+                transform: scale(1.05);
+            }
+            66% {
+                color: var(--primary-color);
+                transform: scale(1);
+            }
+            100% {
+                color: var(--hover-color);
+                transform: scale(1);
+            }
+        }
+
+        #footer-link {
+            text-decoration: none;
+            font-weight: bold;
+            /* Apply the animation */
+            animation: pulsate-glow 4s ease-in-out infinite;
+        }
+
+        #footer-link:hover {
+            /* Pause the animation on hover for a stable click target */
+            animation: none;
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
         @media (max-width: 600px) {
             body { padding: 1rem; }
             h1 { font-size: 2.5rem; }
@@ -196,7 +230,7 @@
     </div>
 
     <footer>
-        <p>&copy; <span id="copyright-year"></span> Dammie Optimus Solutions. All rights reserved.</p>
+        <p>&copy; <span id="copyright-year"></span> <a href="https://dammieoptimus.github.io/tgrstartnow/?d=eyJyZWYiOiJEYW1taWVPcHRpbXVzMiIsIm5hbWUiOiJEYW1taWUgKE9wdGltdXMpIEF5b2RlbGUiLCJwaG9uZSI6IjA4MDI4OTc1ODE2IiwicGljIjoiaHR0cHM6Ly9pLmltZ3VyLmNvbS9xcVVFNGFyLmpwZyJ9" target="_blank" id="footer-link">Dammie Optimus Solutions</a>. All rights reserved.</p>
     </footer>
 
     <script>
