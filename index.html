@@ -345,17 +345,24 @@
                         // Attach the copy functionality to the button
                         copyButton.addEventListener('click', (event) => {
                             event.stopPropagation(); // Stop the event from bubbling to the list item
+                            
+                            // Format the text to be copied
                             let textToCopy = `${title}\n`;
-                            if (subtext) textToCopy += `${subtext}\n`;
-                            textToCopy += url;
+                            if (subtext) {
+                                textToCopy += `${subtext}\n`;
+                            }
+                            // Append the URL, two newlines, and the signature
+                            textToCopy += `${url}\n\nDammie Optimus Solutions`;
 
+                            // Use the modern Clipboard API to copy the text
                             navigator.clipboard.writeText(textToCopy).then(() => {
+                                // Provide visual feedback to the user
                                 copyButton.textContent = 'Copied!';
                                 copyButton.classList.add('copied');
                                 setTimeout(() => {
                                     copyButton.textContent = 'Copy';
                                     copyButton.classList.remove('copied');
-                                }, 2000);
+                                }, 2000); // Reset the button text after 2 seconds
                             }).catch(err => console.error('Failed to copy text: ', err));
                         });
                         
