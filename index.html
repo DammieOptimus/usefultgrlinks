@@ -86,8 +86,47 @@
         }
 
         .link-item {
+            position: relative; /* This is crucial for positioning the copy button */
             margin-bottom: 1.5rem;
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0; /* Hidden by default */
+            pointer-events: none; /* Not clickable when hidden */
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+            z-index: 2;
+        }
+        
+        /* This combined rule makes the button visible on desktop hover AND mobile tap */
+        .link-item:hover .copy-button,
+        .link-item.active .copy-button {
+            opacity: 0.8;
+            pointer-events: auto; /* Make it clickable when visible */
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Style for the button's "Copied!" feedback state */
+        .copy-button.copied {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--primary-color);
+            opacity: 1;
         }
         
         .error-message {
@@ -244,11 +283,12 @@
         <p>&copy; <span id="copyright-year"></span> <a href="https://dammieoptimus.github.io/tgrstartnow/?d=eyJyZWYiOiJEYW1taWVPcHRpbXVzMiIsIm5hbWUiOiJEYW1taWUgKE9wdGltdXMpIEF5b2RlbGUiLCJwaG9uZSI6IjA4MDI4OTc1ODE2IiwicGljIjoiaHR0cHM6Ly9pLmltZ3VyLmNvbS9xcVVFNGFyLmpwZyJ9" target="_blank" id="footer-link">Dammie Optimus Solutions</a>. All rights reserved.</p>
     </footer>
 
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', () => {
             const linkList = document.getElementById('link-list');
             const searchBox = document.getElementById('search-box');
 
+            // --- Main Function to Load and Build Links ---
             async function loadLinks() {
                 try {
                     const response = await fetch('links.txt');
@@ -263,68 +303,98 @@
 
                     lines.forEach(line => {
                         const parts = line.split('|');
-                        if (parts.length >= 2) {
-                            const url = parts[0].trim();
-                            const title = parts[1].trim();
-                            const subtext = parts.length === 3 ? parts[2].trim() : null;
+                        if (parts.length < 2) return;
 
-                            if (url && title) {
-                                const listItem = document.createElement('li');
-                                listItem.className = 'link-item';
+                        const url = parts[0].trim();
+                        const title = parts[1].trim();
+                        const subtext = parts.length >= 3 ? parts[2].trim() : null;
 
-                                const link = document.createElement('a');
-                                link.href = url;
-                                link.target = '_blank';
-                                
-                                const textContentDiv = document.createElement('div');
-                                textContentDiv.className = 'link-text-content';
+                        if (!url || !title) return;
 
-                                const titleSpan = document.createElement('span');
-                                titleSpan.className = 'link-title';
-                                titleSpan.textContent = title;
-                                textContentDiv.appendChild(titleSpan);
+                        const listItem = document.createElement('li');
+                        listItem.className = 'link-item';
 
-                                if (subtext) {
-                                    const subtextSpan = document.createElement('span');
-                                    subtextSpan.className = 'link-subtext';
-                                    subtextSpan.textContent = subtext;
-                                    textContentDiv.appendChild(subtextSpan);
-                                }
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.target = '_blank';
+                        
+                        const textContentDiv = document.createElement('div');
+                        textContentDiv.className = 'link-text-content';
 
-                                link.appendChild(textContentDiv);
-                                listItem.appendChild(link);
-                                linkList.appendChild(listItem);
-                            }
+                        const titleSpan = document.createElement('span');
+                        titleSpan.className = 'link-title';
+                        titleSpan.textContent = title;
+                        textContentDiv.appendChild(titleSpan);
+
+                        if (subtext) {
+                            const subtextSpan = document.createElement('span');
+                            subtextSpan.className = 'link-subtext';
+                            subtextSpan.textContent = subtext;
+                            textContentDiv.appendChild(subtextSpan);
                         }
+
+                        link.appendChild(textContentDiv);
+                        
+                        const copyButton = document.createElement('button');
+                        copyButton.className = 'copy-button';
+                        copyButton.textContent = 'Copy';
+
+                        // Attach the explosion animation handler directly to the link
+                        link.addEventListener('click', handleLinkClick);
+
+                        // Attach the copy functionality to the button
+                        copyButton.addEventListener('click', (event) => {
+                            event.stopPropagation(); // Stop the event from bubbling to the list item
+                            let textToCopy = `${title}\n`;
+                            if (subtext) textToCopy += `${subtext}\n`;
+                            textToCopy += url;
+
+                            navigator.clipboard.writeText(textToCopy).then(() => {
+                                copyButton.textContent = 'Copied!';
+                                copyButton.classList.add('copied');
+                                setTimeout(() => {
+                                    copyButton.textContent = 'Copy';
+                                    copyButton.classList.remove('copied');
+                                }, 2000);
+                            }).catch(err => console.error('Failed to copy text: ', err));
+                        });
+                        
+                        // Smart handler for the list item for mobile tap-to-reveal
+                        listItem.addEventListener('click', (event) => {
+                            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                            if (isTouchDevice && !listItem.classList.contains('active')) {
+                                event.preventDefault(); // IMPORTANT: Prevents navigation on first tap
+                                document.querySelectorAll('.link-item.active').forEach(item => item.classList.remove('active'));
+                                listItem.classList.add('active');
+                            }
+                        });
+                        
+                        listItem.appendChild(link);
+                        listItem.appendChild(copyButton);
+                        linkList.appendChild(listItem);
                     });
-                    addClickListeners();
+
                 } catch (error) {
                     console.error('Error loading links:', error);
                     linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running from a web server.</li>`;
                 }
             }
 
-            const handleSearch = () => {
-                const searchTerm = searchBox.value.toLowerCase();
-                const linkItems = linkList.querySelectorAll('.link-item');
-
-                linkItems.forEach(item => {
-                    const title = item.querySelector('.link-title').textContent.toLowerCase();
-                    const subtextEl = item.querySelector('.link-subtext');
-                    const subtext = subtextEl ? subtextEl.textContent.toLowerCase() : '';
-                    
-                    const isMatch = title.includes(searchTerm) || subtext.includes(searchTerm);
-                    item.style.display = isMatch ? '' : 'none';
-                });
-            };
-
-            searchBox.addEventListener('input', handleSearch);
-
+            // --- Link Click Animation Handler ---
             const handleLinkClick = (event) => {
-                event.preventDefault();
                 const link = event.currentTarget;
-                if (link.classList.contains('animating')) return;
+                // Don't animate if the link item is in 'active' state (mobile first tap)
+                if (link.parentElement.classList.contains('active')) {
+                     // On second tap, remove active state and let animation proceed
+                     link.parentElement.classList.remove('active');
+                }
+
+                if (link.classList.contains('animating')) {
+                    event.preventDefault();
+                    return;
+                }
                 
+                event.preventDefault(); // Always prevent default to control the flow
                 link.classList.add('animating');
                 const rect = link.getBoundingClientRect();
                 const x = event.clientX - rect.left;
@@ -343,17 +413,30 @@
                 }, 500);
             };
 
-            const addClickListeners = () => {
-                const links = linkList.querySelectorAll('.link-item a');
-                links.forEach(link => {
-                    link.addEventListener('click', handleLinkClick);
+            // --- Search Functionality ---
+            const handleSearch = () => {
+                const searchTerm = searchBox.value.toLowerCase();
+                linkList.querySelectorAll('.link-item').forEach(item => {
+                    const title = item.querySelector('.link-title').textContent.toLowerCase();
+                    const subtextEl = item.querySelector('.link-subtext');
+                    const subtext = subtextEl ? subtextEl.textContent.toLowerCase() : '';
+                    item.style.display = (title.includes(searchTerm) || subtext.includes(searchTerm)) ? '' : 'none';
                 });
             };
+            searchBox.addEventListener('input', handleSearch);
 
+            // --- Global Click Listener to close active copy buttons ---
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('.link-item')) {
+                    document.querySelectorAll('.link-item.active').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                }
+            });
+
+            // --- Initializers ---
             loadLinks();
-
-            const copyrightYear = document.getElementById('copyright-year');
-            copyrightYear.textContent = new Date().getFullYear();
+            document.getElementById('copyright-year').textContent = new Date().getFullYear();
         });
     </script>
 </body>
