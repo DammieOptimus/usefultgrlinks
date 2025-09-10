@@ -381,6 +381,9 @@
                         linkList.appendChild(listItem);
                     });
 
+                    // after the links have been successfully loaded.
+                    applyUrlSearchQuery();
+
                 } catch (error) {
                     console.error('Error loading links:', error);
                     linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running from a web server.</li>`;
@@ -432,6 +435,23 @@
             };
             searchBox.addEventListener('input', handleSearch);
 
+            // --- Handle Search Query from URL Parameter ---
+            const applyUrlSearchQuery = () => {
+                const params = new URLSearchParams(window.location.search);
+                const searchQuery = params.get('q'); // Use 'q' as the query parameter, e.g., ?q=tgr
+
+                if (searchQuery) {
+                    // Decode the search query to handle spaces (%20 or +) and other characters
+                    const decodedQuery = decodeURIComponent(searchQuery.replace(/\+/g, ' '));
+                    
+                    // Populate the search box with the term from the URL
+                    searchBox.value = decodedQuery;
+                    
+                    // Programmatically trigger the search function to filter the results
+                    handleSearch();
+                }
+            };
+            
             // --- Global Click Listener to close active copy buttons ---
             document.addEventListener('click', (event) => {
                 if (!event.target.closest('.link-item')) {
