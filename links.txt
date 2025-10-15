@@ -48,7 +48,6 @@ https://youtube.com/shorts/nNqbK4E-FLM?feature=share|How to Make a Quick Withdra
 https://youtube.com/shorts/5H9qxha-aT0?feature=share|How to Withdraw Funds from Your TGR Wallet|A quick video guide demonstrating the simple process of withdrawing your earnings.
 https://youtu.be/NSgZTMGKw3M|How to Contact the TGR Support Team|The correct procedure for sending a message to customer support when you have an issue.
 https://youtu.be/5x7GDgzxJ6s|How to Check Replies from Customer Support|After contacting support, use this guide to find and read their response.
-https://play.google.com/store/apps/details?id=statussaver.statusdownloader.downloadstatus.savestatus|Recommended Tool: WhatsApp Status Saver|Save videos and pictures from WhatsApp Statuses to use for your own marketing.
 https://youtu.be/IZ6wa8X5-t8|Prepare EPINs for Fun Print|A detailed guide on how to format your TGR EPINs so they are ready for printing.
 https://youtu.be/13oeROrMzG4|How to Print Electricity Bills with Fun Print|A guide on printing PHCN/NEPA bills using a Bluetooth thermal printer.
 https://youtu.be/Q9_cX4DiIjs|How to Print Banners Using Fun Print|Learn how to use your Bluetooth printer to print simple banners with the Fun Print application.
@@ -75,3 +74,5 @@ https://youtu.be/Ork4t-4xIj0|Step 1: Generate Recharge Card EPINs|The essential 
 https://youtu.be/yyXamZMK8h8|Step 2: Customize Your Generated EPINs|Learn to format the PINs you generated before sending them to your Walk Print compatible app.
 https://youtu.be/pW3dPgeo1FI|Introduction to the Walk Print Bluetooth Printer|An introductory video showcasing the new Bluetooth printer and how to use it.
 https://youtu.be/67s4BcXd-Ss|Printing Recharge Cards (Pink Walk Print Model)|A practical guide on printing TGR recharge cards, specifically using the pink Walk Print printer model.
+https://play.google.com/store/apps/details?id=statussaver.statusdownloader.downloadstatus.savestatus|Recommended Tool: WhatsApp Status Saver|Save videos and pictures from WhatsApp Statuses to use for your own marketing.
+https://dammieoptimus.github.io/tgr-playbook/|TGR Playbook|TGR Playbook is the essential training hub for your team. This app provides instant access to a complete library of step-by-step guides for every task in the TGR business. With a single click, copy perfectly formatted instructions to share instantly with your members on WhatsApp, empowering everyone with the knowledge they need to succeed.
