@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF--8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Vortex</title>
+    <title>TGR Link Vortex</title>
     <!-- Google Font for consistent typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
     <style>
         /* --- Global Styles & Variables (Adapted from TGR Brand Dark Theme) --- */
         :root {
-            --primary-color: #0077B3;      /* TGR Deep Blue */
-            --secondary-color: #0099DD;    /* TGR Blue */
-            --accent-color: #D92E1A;       /* TGR Red */
-            --highlight-color: #ADD8E6;   /* TGR Light Blue */
-            
-            /* Dark Mode Neutrals */
-            --background-color: #222831;   /* Dark Charcoal Blue */
-            --card-background: #393E46;    /* Lighter Dark Gray */
-            --text-color: #EEEEEE;         /* Off-white Text */
+            --primary-color: #0077B3;
+            /* TGR Deep Blue */
+            --secondary-color: #0099DD;
+            /* TGR Blue */
+            --accent-color: #D92E1A;
+            /* TGR Red */
+            --highlight-color: #ADD8E6;
+            /* TGR Light Blue */
+
+            --background-color: #222831;
+            /* Dark Charcoal Blue */
+            --card-background: #393E46;
+            /* Lighter Dark Gray */
+            --text-color: #EEEEEE;
+            /* Off-white Text */
             --header-text-color: #ffffff;
             --shadow-color: rgba(0, 0, 0, 0.2);
             --font-family: 'Poppins', sans-serif;
-            --animation-color: #ffae42; /* Retained from original for explosion effect */
+            --animation-color: #ffae42;
         }
 
         * {
@@ -55,7 +64,7 @@
             font-weight: 700;
             margin-bottom: 0.25rem;
         }
-        
+
         .app-header .subtitle {
             font-size: 1rem;
             font-weight: 400;
@@ -68,12 +77,22 @@
             font-size: 0.9rem;
             color: #AAAAAA;
         }
-        
-        /* --- Pulsating Footer Link --- */
+
         @keyframes pulsate-glow {
-            0%   { color: var(--secondary-color); text-shadow: 0 0 5px rgba(0, 153, 221, 0.5); }
-            50%  { color: var(--highlight-color); text-shadow: 0 0 15px rgba(173, 216, 230, 0.8); }
-            100% { color: var(--secondary-color); text-shadow: 0 0 5px rgba(0, 153, 221, 0.5); }
+            0% {
+                color: var(--secondary-color);
+                text-shadow: 0 0 5px rgba(0, 153, 221, 0.5);
+            }
+
+            50% {
+                color: var(--highlight-color);
+                text-shadow: 0 0 15px rgba(173, 216, 230, 0.8);
+            }
+
+            100% {
+                color: var(--secondary-color);
+                text-shadow: 0 0 5px rgba(0, 153, 221, 0.5);
+            }
         }
 
         .app-footer a {
@@ -81,9 +100,9 @@
             font-weight: 600;
             animation: pulsate-glow 4s ease-in-out infinite;
         }
-        
+
         .app-footer a:hover {
-            animation: none; /* Pause animation on hover for stable click */
+            animation: none;
             text-decoration: underline;
         }
 
@@ -92,6 +111,57 @@
             max-width: 800px;
             margin: 2.5rem auto;
             padding: 0 1rem;
+        }
+
+        /* --- Scrolling Marquee Bar Styling (NEW) --- */
+        #marquee-container {
+            margin-bottom: 2.5rem;
+        }
+
+        .marquee-bar {
+            background-color: #2c313a;
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+        }
+
+        .marquee-content {
+            display: flex;
+            flex-shrink: 0;
+            animation-name: scroll-left;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .marquee-bar:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        .marquee-content-block {
+            padding: 0.75rem 2rem;
+        }
+
+        @keyframes scroll-left {
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .marquee-link {
+            color: var(--highlight-color) !important;
+            text-decoration: underline;
+            font-weight: 600;
+            padding: 0 0.25rem;
+        }
+
+        .marquee-link:hover {
+            color: #ffffff !important;
         }
 
         /* --- Re-styled Search Box --- */
@@ -103,11 +173,11 @@
             background-color: var(--card-background);
             color: var(--text-color);
             border: 2px solid #4a505a;
-            border-radius: 50px; /* Pill shape */
+            border-radius: 50px;
             margin-bottom: 2.5rem;
             transition: all 0.3s ease;
         }
-        
+
         #search-box::placeholder {
             color: #AAAAAA;
         }
@@ -117,7 +187,7 @@
             border-color: var(--secondary-color);
             box-shadow: 0 0 15px rgba(0, 153, 221, 0.3);
         }
-        
+
         /* --- Re-styled Link List (as Cards) --- */
         .link-list {
             list-style: none;
@@ -140,17 +210,16 @@
             text-decoration: none;
             box-shadow: 0 5px 20px var(--shadow-color);
             border-left: 5px solid transparent;
-            overflow: hidden; /* For explosion effect */
+            overflow: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .link-item a:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
             border-left-color: var(--accent-color);
         }
-        
-        /* Numbered Circle (from .accordion-number style) */
+
         .link-item a:before {
             counter-increment: link-counter;
             content: counter(link-counter);
@@ -167,35 +236,30 @@
             font-size: 1.2rem;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        
+
         .link-item a:hover:before {
             background-color: var(--accent-color);
             color: var(--header-text-color);
-        }
-        
-        .link-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text-color);
-            word-break: break-word;
-        }
-        
-        .link-subtext {
-            font-size: 0.9rem;
-            font-style: italic;
-            opacity: 0.8;
-            margin-top: 0.25rem;
-            word-break: break-word;
         }
 
         .link-text-content {
             display: flex;
             flex-direction: column;
         }
-        
+
         .link-title {
             font-size: 1.15rem;
-            /* ... existing styles ... */
+            font-weight: 600;
+            color: var(--text-color);
+            word-break: break-word;
+        }
+
+        .link-subtext {
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+            word-break: break-word;
         }
 
         /* --- Re-styled Copy Button --- */
@@ -248,8 +312,45 @@
         }
 
         @keyframes explode {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(40); opacity: 0; }
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(40);
+                opacity: 0;
+            }
+        }
+
+        /* --- Back to Top Button (NEW) --- */
+        #back-to-top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        #back-to-top-btn.show {
+            display: block;
+            opacity: 1;
+        }
+
+        #back-to-top-btn:hover {
+            background-color: #B82414;
+            transform: scale(1.1);
         }
 
         /* --- Responsiveness --- */
@@ -257,20 +358,23 @@
             .app-header h1 {
                 font-size: 2.2rem;
             }
+
             .container {
                 margin: 1.5rem auto;
             }
+
             .link-item a {
                 padding: 1rem;
                 gap: 1rem;
             }
+
             .link-title {
                 font-size: 1rem;
             }
         }
-
     </style>
 </head>
+
 <body>
 
     <header class="app-header">
@@ -279,91 +383,59 @@
     </header>
 
     <main class="container">
+        <!-- Placeholder for the scrolling notice (NEW) -->
+        <div id="marquee-container"></div>
+
         <input type="text" id="search-box" placeholder="Search for a link...">
-        
+
         <ul class="link-list" id="link-list">
             <!-- Links will be dynamically loaded here from links.txt -->
         </ul>
     </main>
 
+    <!-- Back to Top Button (NEW) -->
+    <button id="back-to-top-btn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
     <footer class="app-footer">
-        <p>&copy; <span id="copyright-year"></span> <a href="https://dammieoptimus.github.io/tgrstartnow/?d=eyJyZWYiOiJEYW1taWVPcHRpbXVzMiIsIm5hbWUiOiJEYW1taWUgKE9wdGltdXMpIEF5b2RlbGUiLCJwaG9uZSI6IjA4MDI4OTc1ODE2IiwicGljIjoiaHR0cHM6Ly9pLmltZ3VyLmNvbS9xcVVFNGFyLmpwZyJ9" target="_blank">Dammie Optimus Solutions</a>. All rights reserved.</p>
+        <p>&copy; <span id="copyright-year"></span> <a
+                href="https://dammieoptimus.github.io/tgrstartnow/?d=eyJyZWYiOiJEYW1taWVPcHRpbXVzMiIsIm5hbWUiOiJEYW1taWUgKE9wdGltdXMpIEF5b2RlbGUiLCJwaG9uZSI6IjA4MDI4OTc1ODE2IiwicGljIjoiaHR0cHM6Ly9pLmltZ3VyLmNvbS9xcVVFNGFyLmpwZyJ9"
+                target="_blank">Dammie Optimus Solutions</a>. All rights reserved.</p>
     </footer>
 
-    <!-- The JavaScript logic remains the same as it correctly manipulates the DOM based on IDs and classes -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const linkList = document.getElementById('link-list');
             const searchBox = document.getElementById('search-box');
 
-            // --- Main Function to Load and Build Links ---
             async function loadLinks() {
                 try {
                     const response = await fetch('links.txt');
                     if (!response.ok) throw new Error('Network response was not ok');
                     const text = await response.text();
                     const lines = text.split('\n').filter(line => line.trim() !== '');
-
-                    if (lines.length === 0) {
-                        linkList.innerHTML = `<li class="error-message">The links.txt file is empty or could not be read.</li>`;
-                        return;
-                    }
+                    if (lines.length === 0) { linkList.innerHTML = `<li class="error-message">The links.txt file is empty.</li>`; return; }
 
                     lines.forEach(line => {
-                        const parts = line.split('|');
-                        if (parts.length < 2) return;
-
-                        const url = parts[0].trim();
-                        const title = parts[1].trim();
-                        const subtext = parts.length >= 3 ? parts[2].trim() : null;
-
+                        const parts = line.split('|'); if (parts.length < 2) return;
+                        const url = parts[0].trim(); const title = parts[1].trim(); const subtext = parts.length >= 3 ? parts[2].trim() : null;
                         if (!url || !title) return;
-
-                        const listItem = document.createElement('li');
-                        listItem.className = 'link-item';
-
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.target = '_blank';
-                        
-                        const textContentDiv = document.createElement('div');
-                        textContentDiv.className = 'link-text-content';
-
-                        const titleSpan = document.createElement('span');
-                        titleSpan.className = 'link-title';
-                        titleSpan.textContent = title;
-                        textContentDiv.appendChild(titleSpan);
-
-                        if (subtext) {
-                            const subtextSpan = document.createElement('span');
-                            subtextSpan.className = 'link-subtext';
-                            subtextSpan.textContent = subtext;
-                            textContentDiv.appendChild(subtextSpan);
-                        }
-
+                        const listItem = document.createElement('li'); listItem.className = 'link-item';
+                        const link = document.createElement('a'); link.href = url; link.target = '_blank';
+                        const textContentDiv = document.createElement('div'); textContentDiv.className = 'link-text-content';
+                        const titleSpan = document.createElement('span'); titleSpan.className = 'link-title'; titleSpan.textContent = title; textContentDiv.appendChild(titleSpan);
+                        if (subtext) { const subtextSpan = document.createElement('span'); subtextSpan.className = 'link-subtext'; subtextSpan.textContent = subtext; textContentDiv.appendChild(subtextSpan); }
                         link.appendChild(textContentDiv);
-                        
-                        const copyButton = document.createElement('button');
-                        copyButton.className = 'copy-button';
-                        copyButton.textContent = 'Copy';
-
+                        const copyButton = document.createElement('button'); copyButton.className = 'copy-button'; copyButton.textContent = 'Copy';
                         link.addEventListener('click', handleLinkClick);
-
                         copyButton.addEventListener('click', (event) => {
                             event.stopPropagation();
-                            let textToCopy = `${title}\n`;
-                            if (subtext) textToCopy += `${subtext}\n`;
+                            let textToCopy = `${title}\n`; if (subtext) textToCopy += `${subtext}\n`;
                             textToCopy += `${url}\n\nDammie Optimus Solutions\nWhatsApp me on 08180419229 or 08028975816, if you need a special app...`;
                             navigator.clipboard.writeText(textToCopy).then(() => {
-                                copyButton.textContent = 'Copied!';
-                                copyButton.classList.add('copied');
-                                setTimeout(() => {
-                                    copyButton.textContent = 'Copy';
-                                    copyButton.classList.remove('copied');
-                                }, 2000);
+                                copyButton.textContent = 'Copied!'; copyButton.classList.add('copied');
+                                setTimeout(() => { copyButton.textContent = 'Copy'; copyButton.classList.remove('copied'); }, 2000);
                             }).catch(err => console.error('Failed to copy text: ', err));
                         });
-                        
                         listItem.addEventListener('click', (event) => {
                             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
                             if (isTouchDevice && !listItem.classList.contains('active')) {
@@ -372,47 +444,22 @@
                                 listItem.classList.add('active');
                             }
                         });
-                        
-                        listItem.appendChild(link);
-                        listItem.appendChild(copyButton);
-                        linkList.appendChild(listItem);
+                        listItem.appendChild(link); listItem.appendChild(copyButton); linkList.appendChild(listItem);
                     });
-
                     applyUrlSearchQuery();
-
-                } catch (error) {
-                    console.error('Error loading links:', error);
-                    linkList.innerHTML = `<li class="error-message">Could not load links.txt. Make sure the file exists and you are running from a web server.</li>`;
-                }
+                } catch (error) { console.error('Error loading links:', error); linkList.innerHTML = `<li class="error-message">Could not load links.txt.</li>`; }
             }
 
-            // --- Link Click Animation Handler ---
             const handleLinkClick = (event) => {
-                const link = event.currentTarget;
-                if (link.parentElement.classList.contains('active')) {
-                     link.parentElement.classList.remove('active');
-                }
-                if (link.classList.contains('animating')) {
-                    event.preventDefault(); return;
-                }
-                event.preventDefault();
-                link.classList.add('animating');
-                const rect = link.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-                const explosion = document.createElement('div');
-                explosion.classList.add('explosion');
-                explosion.style.left = `${x}px`;
-                explosion.style.top = `${y}px`;
+                const link = event.currentTarget; if (link.parentElement.classList.contains('active')) { link.parentElement.classList.remove('active'); }
+                if (link.classList.contains('animating')) { event.preventDefault(); return; }
+                event.preventDefault(); link.classList.add('animating');
+                const rect = link.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top;
+                const explosion = document.createElement('div'); explosion.classList.add('explosion'); explosion.style.left = `${x}px`; explosion.style.top = `${y}px`;
                 link.appendChild(explosion);
-                setTimeout(() => {
-                    window.open(link.href, link.target || '_self');
-                    explosion.remove();
-                    link.classList.remove('animating');
-                }, 500);
+                setTimeout(() => { window.open(link.href, link.target || '_self'); explosion.remove(); link.classList.remove('animating'); }, 500);
             };
 
-            // --- Search Functionality ---
             const handleSearch = () => {
                 const searchTerm = searchBox.value.toLowerCase();
                 linkList.querySelectorAll('.link-item').forEach(item => {
@@ -424,30 +471,55 @@
             };
             searchBox.addEventListener('input', handleSearch);
 
-            // --- Handle Search Query from URL Parameter ---
             const applyUrlSearchQuery = () => {
-                const params = new URLSearchParams(window.location.search);
-                const searchQuery = params.get('q');
-                if (searchQuery) {
-                    const decodedQuery = decodeURIComponent(searchQuery.replace(/\+/g, ' '));
-                    searchBox.value = decodedQuery;
-                    handleSearch();
-                }
+                const params = new URLSearchParams(window.location.search); const searchQuery = params.get('q');
+                if (searchQuery) { const decodedQuery = decodeURIComponent(searchQuery.replace(/\+/g, ' ')); searchBox.value = decodedQuery; handleSearch(); }
             };
 
-            // --- Global Click Listener to close active copy buttons ---
             document.addEventListener('click', (event) => {
-                if (!event.target.closest('.link-item')) {
-                    document.querySelectorAll('.link-item.active').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                }
+                if (!event.target.closest('.link-item')) { document.querySelectorAll('.link-item.active').forEach(item => { item.classList.remove('active'); }); }
             });
+
+            // --- Function: Setup the scrolling notice bar (NEW) ---
+            const setupScrollingNotice = (noticeData) => {
+                if (!noticeData || !noticeData.enabled) { return; }
+                const marqueeContainer = document.getElementById('marquee-container'); let content = noticeData.content;
+                content = content.replace(/\[tel:([\d\s+-]+)\]/g, '<a href="tel:$1" class="marquee-link tel-link">$1</a>');
+                content = content.replace(/\[link:(.*?)\|(.*?)\]/g, '<a href="$1" target="_blank" class="marquee-link web-link">$2</a>');
+                const marqueeBar = document.createElement('div'); marqueeBar.className = 'marquee-bar';
+                const marqueeContent = document.createElement('div'); marqueeContent.className = 'marquee-content';
+                const contentBlock1 = document.createElement('div'); contentBlock1.className = 'marquee-content-block'; contentBlock1.innerHTML = content;
+                const contentBlock2 = document.createElement('div'); contentBlock2.className = 'marquee-content-block'; contentBlock2.innerHTML = content;
+                marqueeContent.appendChild(contentBlock1); marqueeContent.appendChild(contentBlock2);
+                marqueeBar.appendChild(marqueeContent); marqueeContainer.appendChild(marqueeBar);
+                const PIXELS_PER_SECOND = 60; const contentWidth = contentBlock1.offsetWidth;
+                const duration = contentWidth / PIXELS_PER_SECOND;
+                marqueeContent.style.animationDuration = `${duration}s`;
+            };
+
+            // --- Function: Handle "Back to Top" button (NEW) ---
+            const setupBackToTopButton = () => {
+                const backToTopBtn = document.getElementById('back-to-top-btn'); if (!backToTopBtn) return;
+                window.addEventListener('scroll', () => { window.scrollY > 300 ? backToTopBtn.classList.add('show') : backToTopBtn.classList.remove('show'); });
+                backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+            };
 
             // --- Initializers ---
             loadLinks();
             document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+            // --- Data and call for the Marquee (NEW) ---
+            // <<< EDIT THE CONTENT FOR THE SCROLLING TEXT HERE >>>
+            const marqueeData = {
+                enabled: true,
+                content: "Welcome to the TGR Playbook! For urgent support, call Dammie Optimus on [tel:08028975816] or just WhatsApp him on [tel:08180419229].  ***   Check out our new promo video here: [link:https://youtu.be/VmAq1HXyL-8|Watch Now]   ***   Remember to share this app with your newly-registered members!"
+            };
+            setupScrollingNotice(marqueeData);
+
+            // --- Call for the Back to Top button (NEW) ---
+            setupBackToTopButton();
         });
     </script>
 </body>
+
 </html>
